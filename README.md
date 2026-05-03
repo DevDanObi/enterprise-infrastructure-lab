@@ -113,7 +113,7 @@ A Standard ACL addresses this cleanly by filtering only on the source IP address
 
 This control is applied close to the destination, typically on VTY lines or management interfaces. This ensures that only authorized systems can reach the management plane, while avoiding unnecessary filtering within the internal network.
 
-**Design reasoning:**
+***Design reasoning:***
 - Control is based on trusted source systems rather than individual services  
 - Reduces configuration complexity and operational risk  
 - Maintains availability of all management protocols without granular filtering  
