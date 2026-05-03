@@ -1,5 +1,4 @@
 # Enterprise Infrastructure Lab
-![alt text](image.png)
 
 ## Overview
 
