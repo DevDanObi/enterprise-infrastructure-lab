@@ -101,7 +101,7 @@ Each control is applied with a clear purpose and placement within the topology.
 
 ---
 
-### Standard ACL (Management Plane)
+### Standard ACL
 
 Standard ACLs are used to regulate access between the Network Management segment and the Co-location environment. The requirement is straightforward. Only known and trusted management systems such as monitoring servers, automation hosts, and administrative endpoints should be allowed to interact with network devices.
 
@@ -114,14 +114,14 @@ A Standard ACL addresses this cleanly by filtering only on the source IP address
 This control is applied close to the destination, typically on VTY lines or management interfaces. This ensures that only authorized systems can reach the management plane, while avoiding unnecessary filtering within the internal network.
 
 ***Design reasoning:***
-- Control is based on trusted source systems rather than individual services  
-- Reduces configuration complexity and operational risk  
-- Maintains availability of all management protocols without granular filtering  
-- Establishes a clear and consistent enforcement point for administrative access
 
-### Extended ACL (Data Plane)
+Control is based on trusted source systems rather than individual services. The objective is to define which management hosts are allowed to interact with the network, instead of restricting how they communicate once access is granted. This approach reduces configuration complexity and operational risk. By avoiding protocol and port-specific rules, the likelihood of misconfiguration or accidental service disruption is minimized. It also ensures that all required management protocols remain available without the need for granular filtering. Services such as SSH, SNMP, NTP, and Syslog can function without being individually permitted.
 
-Extended ACLs are used to enforce business policy between VLANs and across sites. In this design, only the R and D network in VLAN 10 is permitted to access services in the Co-location Data Centre, and only over HTTPS.
+Finally, it establishes a clear and consistent enforcement point for administrative access. Applying the control at the destination ensures that only authorized systems can reach the management plane, while keeping the rest of the network unaffected.
+
+### Extended ACL
+
+Extended ACLs are used to enforce business policy between VLANs and across sites. In this design, only the R&D network in VLAN 10 is permitted to access services in the Co-location Data Centre, and only over HTTPS.
 
 An Extended ACL is required because the policy depends on:
 - Source network  
