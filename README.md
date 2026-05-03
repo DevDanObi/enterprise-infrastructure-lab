@@ -101,43 +101,98 @@ Each control is applied with a clear purpose and placement within the topology.
 
 ---
 
-### Standard ACL
+## CCIE-Style Lab Scenario – ACL Design and Implementation
 
-Standard ACLs are used to regulate access between the Network Management segment and the Co-location environment. The requirement is straightforward. Only known and trusted management systems such as monitoring servers, automation hosts, and administrative endpoints should be allowed to interact with network devices.
+### Scenario Overview
 
-The management network supports multiple services across different protocols and ports, including NTP, SSH, Telnet, SNMP, and Syslog. The goal is not to filter based on application type, but to strictly control which sources are permitted to initiate any form of management communication.
+You are tasked with implementing access control policies in a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a Network Management and Logging block.
 
-Introducing an Extended ACL in this context would add unnecessary complexity. Each service would require explicit protocol and port definitions, increasing the likelihood of configuration errors, service interruptions, or unintended blocking of legitimate management traffic.
+Connectivity between the Head Office and the Co-location Data Centre is established through a GRE over IPsec tunnel across an ISP network. Routing between all segments is already functional.
 
-A Standard ACL addresses this cleanly by filtering only on the source IP address. Once a trusted host is permitted, all required management services can operate without additional policy overhead.
+The Head Office contains multiple VLANs, including a dedicated Research and Development segment (VLAN 10). The Co-location Data Centre hosts critical services in VLAN 100, including an HTTPS server.
 
-This control is applied close to the destination, typically on VTY lines or management interfaces. This ensures that only authorized systems can reach the management plane, while avoiding unnecessary filtering within the internal network.
+The Network Management and Logging block provides centralized services such as monitoring, logging, directory services, and automation.
 
-***Design reasoning:***
+Your task is to design and implement ACL policies that enforce strict access control while maintaining operational flexibility.
 
-Control is based on trusted source systems rather than individual services. The objective is to define which management hosts are allowed to interact with the network, instead of restricting how they communicate once access is granted. This approach reduces configuration complexity and operational risk. 
+---
 
-By avoiding protocol and port-specific rules, the likelihood of misconfiguration or accidental service disruption is minimized. It also ensures that all required management protocols remain available without the need for granular filtering. Services such as SSH, SNMP, NTP, and Syslog can function without being individually permitted.
+### Task 1 – Head Office to Co-Lo Data Centre Access Control
 
-Finally, it establishes a clear and consistent enforcement point for administrative access. Applying the control at the destination ensures that only authorized systems can reach the management plane, while keeping the rest of the network unaffected.
+The Research and Development segment (VLAN 10 – 192.168.10.0/24) in the Head Office requires access to an HTTPS service hosted in the Co-Lo Data Centre (10.1.1.30).
 
-### Extended ACL
+No other VLANs within the Head Office are permitted to access services in the Co-Lo Data Centre.
 
-Extended ACLs are used to enforce business policy between VLANs and across sites. In this design, only the R&D network in VLAN 10 is permitted to access services in the Co-location Data Centre, and only over HTTPS.
+#### Requirements
 
-An Extended ACL is required because the policy depends on:
-- Source network  
-- Destination network  
-- Protocol and port  
+- Only VLAN 10 is allowed to initiate HTTPS connections to the Co-Lo HTTPS server  
+- All other traffic from any Head Office VLAN to the Co-Lo network must be denied  
+- Traffic should be filtered before traversing the WAN tunnel  
 
-The requirement is precise. R and D must reach the Co-lo services securely over HTTPS, while all other traffic must be denied. This cannot be achieved with a Standard ACL.
+#### Design Considerations
 
-The ACL is applied close to the **source**, at the Head Office edge interface facing the WAN. This ensures unwanted traffic is dropped before entering the WAN, reducing unnecessary load and exposure.
+- The policy requires matching source, destination, and protocol  
+- Traffic should be controlled as close to its origin as possible  
+- Unnecessary traffic should not be allowed into the GRE/IPsec tunnel  
 
-**Design reasoning:**
-- Business-driven segmentation  
-- Protocol-specific control using TCP port 443  
-- Early enforcement to protect WAN and remote site  
+#### Implementation Questions
+
+1. What type of ACL should be used to enforce this requirement  
+2. On which device in the Head Office should this ACL be configured  
+3. On which interface and in which direction should the ACL be applied  
+
+---
+
+### Task 2 – Network Management and Logging Block to Co-Lo Data Centre Access Control
+
+The Co-Lo Data Centre does not have internet access. It communicates only with:
+
+- The Research and Development segment (VLAN 10) for application traffic  
+- The Network Management and Logging block (172.16.1.0/24) for administrative and operational functions  
+
+The Network Management and Logging block supports multiple services including SNMP, SSH, Telnet, Syslog, NTP, HTTP, and HTTPS. Additional services may be introduced in the future.
+
+#### Requirements
+
+- Only the Network Management and Logging subnet is permitted to access Co-Lo infrastructure devices  
+- All required management and logging protocols must be allowed  
+- The solution must accommodate future protocol additions without frequent modification  
+- Unauthorized sources must be prevented from accessing Co-Lo devices  
+
+#### Design Considerations
+
+- The control requirement is based on trusted source networks rather than specific applications  
+- Introducing protocol-specific filtering may increase operational complexity  
+- The enforcement point should protect Co-Lo devices directly  
+
+#### Implementation Questions
+
+1. What type of ACL should be used for this requirement  
+2. On which device should this ACL be configured  
+3. On which interface or access point should this ACL be applied  
+
+---
+
+### Evaluation Criteria
+
+Your solution will be evaluated based on:
+
+- Correct selection of ACL type for each scenario  
+- Proper placement of ACLs within the topology  
+- Alignment with enterprise design practices  
+- Efficiency and scalability of the solution  
+- Ability to enforce policy without impacting legitimate communication  
+
+---
+
+### Expected Outcome
+
+A correct implementation will result in:
+
+- Successful HTTPS communication from VLAN 10 to the Co-Lo HTTPS server  
+- Denial of access from other Head Office VLANs to Co-Lo services  
+- Controlled access from the Network Management and Logging block to Co-Lo devices  
+- Continued operation of all required management and logging services  
 
 ---
 
