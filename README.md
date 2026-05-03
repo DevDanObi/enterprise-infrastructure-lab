@@ -3,6 +3,7 @@
 ## Overview
 
 This repository documents the design and implementation of a multi-site enterprise network spanning a Head Office, a Co-location Data Centre, and a dedicated out-of-band management, logging, and monitoring environment. The design reflects real enterprise expectations around segmentation, security, availability, and operational visibility, while aligning with core CCNA domains.
+![alt text](<Screenshot 2026-05-03 024804-2.png>)
 
 ---
 
