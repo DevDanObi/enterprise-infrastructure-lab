@@ -2,63 +2,53 @@
 
 ## Overview
 
-This repository documents the design and implementation of a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a dedicated Out-of-Band management, logging and monitoring component for the enterprise.
-![alt text](<Screenshot 2026-05-03 024804-1.png>)
-
-The environment is built to reflect real-world enterprise requirements:
-- Segmentation and controlled access
-- Secure site-to-site connectivity
-- Centralized monitoring and logging
-- High availability at the distribution layer
-- Controlled service exposure across sites
-
-All implementations align with core CCNA domains including Network Fundamentals, Network Access, IP Connectivity, IP Services, Security, and Automation concepts.
+This repository documents the design and implementation of a multi-site enterprise network spanning a Head Office, a Co-location Data Centre, and a dedicated out-of-band management, logging, and monitoring environment. The design reflects real enterprise expectations around segmentation, security, availability, and operational visibility, while aligning with core CCNA domains.
 
 ---
 
 ## Architecture Summary
 
-The Head Office follows a three-tier hierarchical design:
-- Access Layer handles endpoint connectivity and VLAN segmentation
-- Distribution Layer enforces routing and policy control
-- Core Layer provides high-speed forwarding toward the edge
+The Head Office follows a three-tier hierarchical model:
 
-The Co-location site uses a collapsed core model optimized for service hosting.
+- **Access Layer** provides endpoint connectivity and VLAN-based segmentation  
+- **Distribution Layer** performs inter-VLAN routing and enforces policy control  
+- **Core Layer** delivers high-speed, resilient forwarding toward external networks  
 
-Connectivity between sites is achieved using GRE over IPsec across an ISP network.
+The Co-location Data Centre uses a **collapsed core design**, optimized for service hosting and reduced operational overhead.
+
+Inter-site connectivity is implemented using **GRE over IPsec across an ISP**, providing secure transport between sites.
 
 ---
 
 ## Addressing Overview
 
-| Segment       | Network            |
-|--------------|------------------|
-| VLAN 10 (R&D) | 192.168.10.0/24 |
-| VLAN 20       | 192.168.20.0/24 |
-| VLAN 30       | 192.168.30.0/24 |
-| Management    | 172.16.1.0/24   |
-| WAN Links     | Public IP/30 point-to-point |
-| Data Centre   | 10.1.1.0/24     |
+| Segment            | Network              |
+|-------------------|---------------------|
+| VLAN 10 (R&D)     | 192.168.10.0/24     |
+| VLAN 20           | 192.168.20.0/24     |
+| VLAN 30           | 192.168.30.0/24     |
+| Management        | 172.16.1.0/24       |
+| Data Centre       | 10.1.1.0/24         |
+| WAN Links         | Public /30 (P2P)    |
 
 ---
 
-## Key Design Principles
+## Design Principles
 
-- VLAN-based segmentation for isolation
-- Extended ACL enforcing business policy (for instance,R&D segment of the enterprise should only use https to communicate with services in the Co-lo only over HTTPS)
-- Standard ACL protecting management plane
-- GRE over IPsec for secure site-to-site communication
-- Centralized monitoring using SNMP and Syslog
-- Redundant Layer 2 and Layer 3 paths for availability
+- VLAN-based segmentation is used to isolate traffic across business units  
+- Access control is policy-driven  
+  - Extended ACLs regulate data plane traffic, for example restricting R&D to HTTPS-only access to Data Centre services  
+  - Standard ACLs are used to protect the management plane  
+- GRE over IPsec is used to secure inter-site communication  
+- Monitoring and logging are centralized using SNMP and Syslog  
+- High availability is achieved through redundant Layer 2 and Layer 3 design at the distribution layer  
+- Service exposure between sites is tightly controlled to reflect enterprise security requirements  
+
 
 ---
 
-## Repository Structure
+## 
 
-### 00-introduction
-- Overview
-- Design Objectives
-- Topology and Architecture
 
 ### 01-network-fundamentals
 - Network Components
