@@ -1,149 +1,178 @@
 # Enterprise Infrastructure Lab
-![alt text](<Screenshot 2026-05-03 024804.png>)
 
 ## Overview
 
-- CCNA-focused enterprise network built in a lab environment
-- Models a Head Office connected to a Co-location Data Centre
-- Designed to explain networking concepts using a working topology
-- Each component reflects real enterprise design decisions
+This repository documents the design and implementation of a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a dedicated Out-of-Band management and monitoring network.
+![alt text](<Screenshot 2026-05-03 024804-1.png>)
 
-## Topology Summary
+The environment is built to reflect real-world enterprise requirements:
+- Segmentation and controlled access
+- Secure site-to-site connectivity
+- Centralized monitoring and logging
+- High availability at the distribution layer
+- Controlled service exposure across sites
 
-- Segmented Head Office network using VLANs
-- Dedicated Management and Monitoring network
-- Core, Distribution, and Access layer separation
-- Fortinet firewall handling NAT and traffic control
-- GRE over IPsec tunnel connecting to Data Centre
-- Centralized services hosted in Data Centre
+All implementations align with core CCNA domains including Network Fundamentals, Network Access, IP Connectivity, IP Services, Security, and Automation concepts.
 
-## Network Segmentation
+---
 
-### Head Office VLANs
+## Architecture Summary
 
-- VLAN 10 → 192.168.10.0/24 (R&D)
-- VLAN 20 → 192.168.20.0/24
-- VLAN 30 → 192.168.30.0/24
-- Each VLAN operates as an independent broadcast domain
-- Inter-VLAN communication controlled via Layer 3 routing and ACLs
+The Head Office follows a three-tier hierarchical design:
+- Access Layer handles endpoint connectivity and VLAN segmentation
+- Distribution Layer enforces routing and policy control
+- Core Layer provides high-speed forwarding toward the edge
 
-### Data Centre
+The Co-location site uses a collapsed core model optimized for service hosting.
 
-- VLAN 100 → 10.1.1.0/24
-- Dedicated to hosting internal services
-- Logically isolated from user networks
+Connectivity between sites is achieved using GRE over IPsec across an ISP network.
 
-## Architecture
+---
 
-### Access Layer
+## Addressing Overview
 
-- Connects end devices
-- Operates at Layer 2
-- Handles VLAN assignment and switching
+| Segment       | Network            |
+|--------------|------------------|
+| VLAN 10 (R&D) | 192.168.10.0/24 |
+| VLAN 20       | 192.168.20.0/24 |
+| VLAN 30       | 192.168.30.0/24 |
+| Management    | 10.10.10.8/30   |
+| WAN Links     | /30 point-to-point |
+| Data Centre   | 10.1.1.0/24     |
 
-### Distribution Layer
+---
 
-- Aggregates access layer traffic
-- Performs inter-VLAN routing using SVIs
-- Acts as policy enforcement point
+## Key Design Principles
 
-### Core Layer
+- VLAN-based segmentation for isolation
+- Extended ACL enforcing business policy (R&D-only access to Co-lo over HTTPS)
+- Standard ACL protecting management plane
+- GRE over IPsec for secure site-to-site communication
+- Centralized monitoring using SNMP and Syslog
+- Redundant Layer 2 and Layer 3 paths for availability
 
-- Provides fast and reliable internal routing
-- Connects distribution layer to edge
-
-### Edge
-
-- Connects enterprise network to external networks
-- Handles NAT, WAN connectivity, and tunnel termination
-
-## WAN Connectivity
-
-- /30 addressing used for point-to-point links
-- Efficient IP utilization
-- GRE tunnel established between Head Office and Data Centre
-- IPsec used to encrypt traffic over WAN
-
-## Access Control
-
-### Standard ACL
-
-- Applied to management network
-- Allows SNMP, SSH, HTTP, HTTPS, Syslog
-- Controls access to network devices
-
-### Extended ACL
-
-- Enforces data plane policy
-- Only VLAN 10 (R&D) allowed to access Data Centre
-- Filters based on source, destination, and protocol
-
-## Security
-
-- NAT implemented at firewall
-- Traffic filtering using ACLs
-- IPsec encryption across WAN
-- Management network isolated from production
-
-## Services
-
-- HTTP Server → 10.1.1.30
-- FTP Server → 10.1.1.10
-- FTP Server → 10.1.1.20
-- Access controlled through defined policies
-
-## Monitoring and Management
-
-- Zabbix for monitoring
-- SNMP and Syslog for visibility and logging
-- Out-of-band network for management access
-
-## Traffic Flow Example
-
-- User in VLAN 10 sends request to Data Centre
-- Traffic forwarded to default gateway (SVI)
-- Routed through distribution and core
-- ACL permits VLAN 10 traffic
-- Traffic enters GRE tunnel
-- Encrypted using IPsec
-- Traverses ISP network
-- Decrypted at Data Centre
-- Delivered to destination server
-
-## Capabilities Implemented
-
-- VLAN segmentation and subnetting
-- Inter-VLAN routing using Layer 3 switching
-- Dynamic routing with OSPF
-- First Hop Redundancy using HSRP
-- Standard and Extended ACLs
-- NAT and firewall enforcement
-- GRE over IPsec tunneling
-- WAN design using /30 addressing
-- Network services (DNS, DHCP, HTTP, FTP)
-- Monitoring and logging (SNMP, Syslog, Zabbix)
-- Structured device management
-
-## Design Position
-
-- Full enterprise-style lab environment
-- Demonstrates interaction between networking concepts
-- Implements segmentation, security, and redundancy
-- Reflects real-world network behavior
+---
 
 ## Repository Structure
 
-- 00-introduction
-- 01-network-foundation
-- 02-security
-- 03-routing
-- 04-services
-- 05-wan
-- 06-observability
-- assets
+### 00-introduction
+- Overview
+- Design Objectives
+- Topology and Architecture
 
-## Purpose
+### 01-network-fundamentals
+- Network Components
+- Topology Design (3-tier, collapsed core)
+- IP Addressing (IPv4, Subnetting)
+- Switching Fundamentals
+- Wireless and Virtualization Concepts
 
-- Explain CCNA concepts using a practical lab
-- Demonstrate enterprise network design principles
-- Provide structured documentation for learning and reference
+### 02-network-access
+- VLAN Design and Segmentation
+- Trunking and Inter-switch Connectivity
+- Spanning Tree (Loop Prevention)
+- EtherChannel
+- Layer 2 Discovery (CDP/LLDP)
+
+### 03-ip-connectivity
+- Routing Concepts
+- Static Routing
+- OSPF (Single Area)
+- Routing Decision Process
+- First Hop Redundancy (HSRP Concepts)
+
+### 04-ip-services
+- NAT
+- DHCP and DNS
+- NTP
+- SNMP
+- Syslog
+- SSH and Remote Access
+- QoS Fundamentals
+- File Transfer (TFTP/FTP)
+
+### 05-security
+- Security Concepts
+- Standard ACL (Management Plane)
+- Extended ACL (Data Plane)
+- Layer 2 Security (Port Security, DHCP Snooping, DAI)
+- VPN (IPsec Concepts)
+- Wireless Security
+
+### 06-wan-and-edge
+- WAN Design
+- ISP Connectivity
+- GRE Tunnel
+- IPsec Overlay
+- Edge Routing
+
+### 07-automation-and-programmability
+- Automation Concepts
+- Infrastructure as Code
+- Ansible Integration
+- REST APIs and JSON
+
+### 08-observability-and-monitoring
+- Monitoring Architecture (Zabbix)
+- Syslog and Logging Strategy
+- SNMP Monitoring
+- Telemetry and Visibility
+- Troubleshooting Approach
+
+### assets
+- Topology Diagrams
+- Screenshots
+- Packet Captures
+
+---
+
+## Security Implementation
+
+Security is enforced through layered controls:
+
+- Standard ACL restricts access to management systems only
+- Extended ACL ensures only VLAN 10 (R&D) can access Co-location services over HTTPS
+- Layer 2 protections include port security and DHCP snooping
+- IPsec ensures encrypted communication across WAN
+
+---
+
+## Services and Operations
+
+- NAT enables external connectivity
+- DHCP and DNS support endpoint operations
+- NTP ensures time consistency across devices
+- SNMP and Syslog provide monitoring and logging visibility
+- SSH is used for secure administrative access
+
+---
+
+## Observability
+
+The Out-of-Band network hosts:
+- Zabbix monitoring platform
+- Automation node
+- Domain controller
+
+All network devices export:
+- Syslog for centralized logging
+- SNMP metrics for monitoring
+
+This provides full operational visibility across the environment.
+
+---
+
+## Design Outcome
+
+This implementation demonstrates:
+- Structured enterprise network design
+- Policy-driven segmentation
+- Secure WAN connectivity
+- Integrated monitoring and logging
+- Alignment with real-world operational practices
+
+---
+
+## Closing Statement
+
+This project represents a practical application of CCNA concepts within an enterprise context, focusing on design decisions, operational visibility, and security enforcement rather than isolated configuration tasks.
