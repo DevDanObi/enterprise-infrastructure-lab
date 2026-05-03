@@ -83,12 +83,92 @@ Inter-site connectivity is implemented using **GRE over IPsec across an ISP**, p
 - File Transfer (TFTP/FTP)
 
 ### 05-security
-- Security Concepts
-- Standard ACL (Management Plane)
-- Extended ACL (Data Plane)
-- Layer 2 Security (Port Security, DHCP Snooping, DAI)
-- VPN (IPsec Concepts)
-- Wireless Security
+## Security Implementation
+
+The security design follows a layered approach where controls are applied based on function, traffic type, and enforcement point within the network. The objective is to separate management access from user data traffic while enforcing strict policy between the Head Office and the Co-location Data Centre.
+
+### Security Concepts
+
+The implementation covers core areas of network security:
+
+- Management plane protection using access control  
+- Data plane restriction using policy-based filtering  
+- Layer 2 attack prevention mechanisms  
+- Encrypted communication across untrusted networks  
+- Secure access considerations for wireless environments  
+
+Each control is applied with a clear purpose and placement within the topology.
+
+---
+
+### Standard ACL (Management Plane)
+
+Standard ACLs are used to protect the management plane. The requirement here is simple. Only trusted management systems such as monitoring servers, automation hosts, and administrators should be able to access network devices.
+
+A Standard ACL is selected because it filters only on the **source IP address**. At the management level, the concern is not the type of traffic but **who is initiating it**.
+
+This ACL is applied close to the **destination**, typically on VTY lines or management interfaces. This ensures that legitimate management traffic is not unintentionally dropped earlier in the path.
+
+**Design reasoning:**
+- Focus is identity, not protocol  
+- Simpler and efficient for management restriction  
+- Prevents unauthorized administrative access  
+
+---
+
+### Extended ACL (Data Plane)
+
+Extended ACLs are used to enforce business policy between VLANs and across sites. In this design, only the R and D network in VLAN 10 is permitted to access services in the Co-location Data Centre, and only over HTTPS.
+
+An Extended ACL is required because the policy depends on:
+- Source network  
+- Destination network  
+- Protocol and port  
+
+The requirement is precise. R and D must reach the Co-lo services securely over HTTPS, while all other traffic must be denied. This cannot be achieved with a Standard ACL.
+
+The ACL is applied close to the **source**, at the Head Office edge interface facing the WAN. This ensures unwanted traffic is dropped before entering the WAN, reducing unnecessary load and exposure.
+
+**Design reasoning:**
+- Business-driven segmentation  
+- Protocol-specific control using TCP port 443  
+- Early enforcement to protect WAN and remote site  
+
+---
+
+### Layer 2 Security
+
+Layer 2 protections are implemented at the access layer to prevent common local network attacks.
+
+Controls include:
+- Port security to limit MAC address learning  
+- DHCP snooping to prevent rogue DHCP servers  
+- Dynamic ARP inspection to mitigate ARP spoofing  
+
+These controls ensure that endpoints cannot manipulate Layer 2 behavior to gain unauthorized access or disrupt the network.
+
+---
+
+### VPN (IPsec Concepts)
+
+Traffic between the Head Office and Co-location Data Centre traverses an untrusted ISP network. To secure this communication, IPsec is used in combination with GRE.
+
+IPsec provides:
+- Encryption to protect data confidentiality  
+- Integrity to prevent tampering  
+- Authentication to verify peer identity  
+
+GRE allows routing flexibility, while IPsec secures the transport.
+
+---
+
+### Wireless Security
+
+No Wireless implemented here.
+
+---
+
+Each control is placed deliberately based on what needs to be protected and where enforcement is most effective.
 
 ### 06-wan-and-edge
 - WAN Design
@@ -117,16 +197,8 @@ Inter-site connectivity is implemented using **GRE over IPsec across an ISP**, p
 
 ---
 
-## Security Implementation
 
-Security is enforced through layered controls:
 
-- Standard ACL restricts access to management systems only
-- Extended ACL ensures only VLAN 10 (R&D) can access Co-location services over HTTPS
-- Layer 2 protections include port security and DHCP snooping
-- IPsec ensures encrypted communication across WAN
-
----
 
 ## Services and Operations
 
