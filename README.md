@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
 # Enterprise Infrastructure Lab
-=======
-<h1 align="center">Enterprise Infrastructure Lab</h1>
-![alt text](image.png)
->>>>>>> Stashed changes
+![alt text](<Screenshot 2026-05-03 024804.png>)
 
 ## Overview
 
