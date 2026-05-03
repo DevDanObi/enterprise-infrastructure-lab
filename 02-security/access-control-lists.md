@@ -12,6 +12,14 @@ The Network Management and Logging block provides centralized services such as m
 
 Your task is to design and implement ACL policies that enforce strict access control while maintaining operational flexibility.
 
+For this scenario, you are required to determine the appropriate use of **Standard and Extended ACLs** based on the requirements of each task. Both ACL types must be used within the solution.
+
+- One task must be implemented using a **Standard ACL**
+- The other task must be implemented using an **Extended ACL**
+- The same ACL type must not be used for both tasks
+
+Your design should clearly justify the selection of ACL type for each task based on the level of control required.
+
 ---
 
 ### Task 1 – Head Office to Co-Lo Data Centre Access Control
