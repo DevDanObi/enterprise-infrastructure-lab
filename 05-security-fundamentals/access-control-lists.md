@@ -26,7 +26,7 @@ Your design should clearly justify the selection of ACL type for each task based
 
 ### Task 1 – Head Office to Co-Lo Data Centre Access Control
 
-The Research and Development segment (VLAN 10 – 192.168.10.0/24) within the Head Office is required to access an HTTPS service hosted in the Co-Lo Data Centre at 10.1.1.30. Access to Co-Lo resources must be strictly limited to this segment. No other Head Office VLANs are permitted to communicate with any services in the Co-Lo environment.
+The R&D segment (VLAN 10 – 192.168.10.0/24) within the Head Office is required to access an HTTPS service hosted in the Co-Lo Data Centre at 10.1.1.30. Access to Co-Lo resources must be strictly limited to this segment. No other Head Office VLANs are permitted to communicate with any services in the Co-Lo environment.
 
 Accordingly, only VLAN 10 is authorized to initiate HTTPS connections to the Co-Lo HTTPS server. All other traffic originating from the Head Office and destined for the Co-Lo network must be explicitly denied. This policy must be enforced at the Head Office edge, ensuring that unauthorized traffic is filtered before it enters the WAN tunnel.
 
