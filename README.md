@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository documents the design and implementation of a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a dedicated Out-of-Band management and monitoring network.
+This repository documents the design and implementation of a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a dedicated Out-of-Band management, logging and monitoring component for the enterprise.
 ![alt text](<Screenshot 2026-05-03 024804-1.png>)
 
 The environment is built to reflect real-world enterprise requirements:
@@ -36,8 +36,8 @@ Connectivity between sites is achieved using GRE over IPsec across an ISP networ
 | VLAN 10 (R&D) | 192.168.10.0/24 |
 | VLAN 20       | 192.168.20.0/24 |
 | VLAN 30       | 192.168.30.0/24 |
-| Management    | 10.10.10.8/30   |
-| WAN Links     | /30 point-to-point |
+| Management    | 172.16.1.0/24   |
+| WAN Links     | Public IP/30 point-to-point |
 | Data Centre   | 10.1.1.0/24     |
 
 ---
@@ -45,7 +45,7 @@ Connectivity between sites is achieved using GRE over IPsec across an ISP networ
 ## Key Design Principles
 
 - VLAN-based segmentation for isolation
-- Extended ACL enforcing business policy (R&D-only access to Co-lo over HTTPS)
+- Extended ACL enforcing business policy (for instance,R&D segment of the enterprise should only use https to communicate with services in the Co-lo only over HTTPS)
 - Standard ACL protecting management plane
 - GRE over IPsec for secure site-to-site communication
 - Centralized monitoring using SNMP and Syslog
