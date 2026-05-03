@@ -114,6 +114,7 @@ A Standard ACL addresses this cleanly by filtering only on the source IP address
 This control is applied close to the destination, typically on VTY lines or management interfaces. This ensures that only authorized systems can reach the management plane, while avoiding unnecessary filtering within the internal network.
 
 ***Design reasoning:***
+
 Control is based on trusted source systems rather than individual services. The objective is to define which management hosts are allowed to interact with the network, instead of restricting how they communicate once access is granted. This approach reduces configuration complexity and operational risk. 
 
 By avoiding protocol and port-specific rules, the likelihood of misconfiguration or accidental service disruption is minimized. It also ensures that all required management protocols remain available without the need for granular filtering. Services such as SSH, SNMP, NTP, and Syslog can function without being individually permitted.
