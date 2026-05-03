@@ -103,18 +103,21 @@ Each control is applied with a clear purpose and placement within the topology.
 
 ### Standard ACL (Management Plane)
 
-Standard ACLs are used to protect the management plane. The requirement here is simple. Only trusted management systems such as monitoring servers, automation hosts, and administrators should be able to access network devices.
+Standard ACLs are used to regulate access between the Network Management segment and the Co-location environment. The requirement is straightforward. Only known and trusted management systems such as monitoring servers, automation hosts, and administrative endpoints should be allowed to interact with network devices.
 
-A Standard ACL is selected because it filters only on the **source IP address**. At the management level, the concern is not the type of traffic but **who is initiating it**.
+The management network supports multiple services across different protocols and ports, including NTP, SSH, Telnet, SNMP, and Syslog. The goal is not to filter based on application type, but to strictly control which sources are permitted to initiate any form of management communication.
 
-This ACL is applied close to the **destination**, typically on VTY lines or management interfaces. This ensures that legitimate management traffic is not unintentionally dropped earlier in the path.
+Introducing an Extended ACL in this context would add unnecessary complexity. Each service would require explicit protocol and port definitions, increasing the likelihood of configuration errors, service interruptions, or unintended blocking of legitimate management traffic.
+
+A Standard ACL addresses this cleanly by filtering only on the source IP address. Once a trusted host is permitted, all required management services can operate without additional policy overhead.
+
+This control is applied close to the destination, typically on VTY lines or management interfaces. This ensures that only authorized systems can reach the management plane, while avoiding unnecessary filtering within the internal network.
 
 **Design reasoning:**
-- Focus is identity, not protocol  
-- Simpler and efficient for management restriction  
-- Prevents unauthorized administrative access  
-
----
+- Control is based on trusted source systems rather than individual services  
+- Reduces configuration complexity and operational risk  
+- Maintains availability of all management protocols without granular filtering  
+- Establishes a clear and consistent enforcement point for administrative access
 
 ### Extended ACL (Data Plane)
 
