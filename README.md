@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 # Enterprise Infrastructure Lab
+=======
+<h1 align="center">Enterprise Infrastructure Lab</h1>
+![alt text](image.png)
+>>>>>>> Stashed changes
 
 ## Overview
 
