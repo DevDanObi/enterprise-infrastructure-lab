@@ -101,7 +101,7 @@ Each control is applied with a clear purpose and placement within the topology.
 
 ---
 
-## CCIE-Style Lab Scenario – ACL Design and Implementation
+## ACL Design and Implementation
 
 ### Scenario Overview
 
@@ -119,21 +119,11 @@ Your task is to design and implement ACL policies that enforce strict access con
 
 ### Task 1 – Head Office to Co-Lo Data Centre Access Control
 
-The Research and Development segment (VLAN 10 – 192.168.10.0/24) in the Head Office requires access to an HTTPS service hosted in the Co-Lo Data Centre (10.1.1.30).
-
-No other VLANs within the Head Office are permitted to access services in the Co-Lo Data Centre.
-
-#### Requirements
-
-- Only VLAN 10 is allowed to initiate HTTPS connections to the Co-Lo HTTPS server  
-- All other traffic from any Head Office VLAN to the Co-Lo network must be denied  
-- Traffic should be filtered before traversing the WAN tunnel  
+The Research and Development segment (VLAN 10 – 192.168.10.0/24) in the Head Office requires access to an HTTPS service hosted in the Co-Lo Data Centre (10.1.1.30). No other VLANs within the Head Office are permitted to access services in the Co-Lo Data Centre. This means that only VLAN 10 is allowed to initiate HTTPS connections to the Co-Lo HTTPS server. All other traffic from any Head Office VLAN to the Co-Lo network must be denied. Traffic should be filtered before traversing the WAN tunnel  
 
 #### Design Considerations
 
-- The policy requires matching source, destination, and protocol  
-- Traffic should be controlled as close to its origin as possible  
-- Unnecessary traffic should not be allowed into the GRE/IPsec tunnel  
+The policy requires matching source, destination, and protocol. Traffic should be controlled as close to its origin as possible. Unnecessary traffic should not be allowed into the GRE/IPsec tunnel. 
 
 #### Implementation Questions
 
