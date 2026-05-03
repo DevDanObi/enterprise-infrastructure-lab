@@ -11,6 +11,7 @@ The Head Office contains multiple VLANs, including a dedicated R&D segment (VLAN
 The Network Management and Logging block provides centralized services such as monitoring, logging, directory services, and automation.
 
 Your task is to design and implement ACL policies that enforce strict access control while maintaining operational flexibility.
+
 ![alt text](image.png)
 
 For this scenario, you are required to determine the appropriate use of **Standard and Extended ACLs** based on the requirements of each task. Both ACL types must be used within the solution.
