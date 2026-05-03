@@ -2,15 +2,16 @@
 
 ### Scenario Overview
 
-You are tasked with implementing access control policies in a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a Network Management and Logging block.
+You are tasked with implementing access control policies in a multi-site enterprise network consisting of a Head Office, a Co-location Data Centre, and a Network Management/Logging block.
 
 Connectivity between the Head Office and the Co-location Data Centre is established through a GRE over IPsec tunnel across an ISP network. Routing between all segments is already functional.
 
-The Head Office contains multiple VLANs, including a dedicated Research and Development segment (VLAN 10). The Co-location Data Centre hosts critical services in VLAN 100, including an HTTPS server.
+The Head Office contains multiple VLANs, including a dedicated R&D segment (VLAN 10). The Co-location Data Centre hosts critical services in VLAN 100, including an HTTPS server.
 
 The Network Management and Logging block provides centralized services such as monitoring, logging, directory services, and automation.
 
 Your task is to design and implement ACL policies that enforce strict access control while maintaining operational flexibility.
+![alt text](image.png)
 
 For this scenario, you are required to determine the appropriate use of **Standard and Extended ACLs** based on the requirements of each task. Both ACL types must be used within the solution.
 
